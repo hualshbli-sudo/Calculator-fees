@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <title>حاسبة الرسوم - الريال العماني</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: auto;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .note {
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      vertical-align: middle;
+    }
+
+    th {
+      background: #f0f0f0;
+    }
+
+    input {
+      width: 100%;
+      padding: 6px;
+      text-align: center;
+    }
+
+    .total {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .actions {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    button {
+      padding: 8px 20px;
+      font-size: 15px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .reset {
+      background: #d9534f;
+      color: #fff;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="container">
+
+    <h2>حاسبة الرسوم</h2>
+
+    <div class="note">جميع الرسوم محسوبة بالريال العماني</div>
+    <table>
+
+      <tr>
+
+        <th>الصنف</th>
+
+        <th>الكمية المدخلة</th>
+
+        <th>الرسوم (ر.ع)</th>
+
+      </tr>
+      <tr>
+
+        <td>1- الشهادات الصحية<br><small>(10 ريالات لكل شهادة)</small></td>
+
+        <td><input type="number" min="0" value="0" id="cert" oninput="calculate()"></td>
+
+        <td id="certFee">0</td>
+
+      </tr>
+
+      <tr>
+
+        <td>2- بيض مائدة<br><small>(40 ريال)</small></td>
+
+        <td><input type="number" min="0" value="0" id="eggs" oninput="calculate()"></td>
+
+        <td id="eggsFee">0</td>
+
+      </tr>
+
+      <tr>
+
+        <td>3- حليب / ألبان / أجبان / صفار بيض<br><small>(5 ريالات لكل 1000 كجم – الحد الأقصى 100 ريال)</small></td>
+
+        <td><input type="number" min="0" value="0" id="dairy" oninput="calculate()" placeholder="بالكيلوجرام"></td>
+
+        <td id="dairyFee">0</td>
+
+      </tr>
+
+      <tr>
+
+        <td>4- أسماك وتونة<br><small>(15 ريال)</small></td>
+
+        <td><input type="number" min="0" value="0" id="fish" oninput="calculate()"></td>
+
+        <td id="fishFee">0</td>
+
+      </tr>
+
+    </table>
+    <div class="total">الإجمالي: <span id="total">0</span> ر.ع</div>
+    <div class="actions">
+
+      <button class="reset" onclick="resetAll()">إعادة تعيين</button>
+
+    </div>
+
+  </div>
+  <script>
+    function calculate() {
+      const cert = Number(document.getElementById('cert').value) || 0;
+      const eggs = Number(document.getElementById('eggs').value) || 0;
+      const dairyKg = Number(document.getElementById('dairy').value) || 0;
+      const fish = Number(document.getElementById('fish').value) || 0;
+      const certFee = cert * 10;
+      const eggsFee = eggs > 0 ? 40 : 0;
+      let dairyFee = (dairyKg / 1000) * 5;
+      if (dairyFee > 100) dairyFee = 100;
+      const fishFee = fish > 0 ? 15 : 0;
+      document.getElementById('certFee').innerText = Math.round(certFee);
+      document.getElementById('eggsFee').innerText = Math.round(eggsFee);
+      document.getElementById('dairyFee').innerText = Math.round(dairyFee);
+      document.getElementById('fishFee').innerText = Math.round(fishFee);
+      const total = certFee + eggsFee + dairyFee + fishFee;
+      document.getElementById('total').innerText = Math.round(total);
+    }
+
+    function resetAll() {
+      document.querySelectorAll('input').forEach(input => input.value = 0);
+      document.querySelectorAll('[id$="Fee"]').forEach(td => td.innerText = 0);
+      document.getElementById('total').innerText = 0;
+    }
+  </script>
+</body>
+
+</html>
